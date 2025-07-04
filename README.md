@@ -9,7 +9,7 @@ However, in cases such as the Gran Turismo games the videos themselves are actua
 Instead they are progressive at half fps, with each frame containing 2 fields stacked on top of each other.
 
 <p align="center">
-  <img width="640" height="360" src="https://github.com/Silentwarior112/GT4-pat-editor/blob/main/stack.JPG">
+  <img width="640" height="360" src="https://github.com/Silentwarior112/PS2-PSS-Tools/blob/main/stack.JPG">
 </p>
 
 In these cases the game is responsible for weaving the fields together by scanning the top and bottom half.
