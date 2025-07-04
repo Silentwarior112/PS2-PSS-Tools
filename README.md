@@ -6,7 +6,7 @@ to achieve 50/60hz video.
 How does it work?
 Some PS2 games have pre-rendered videos (usually opening / intro cinematics) that run at 50/60hz.
 However, in cases such as the Gran Turismo games the videos themselves are actually not interlaced 50/60hz.
-Instead they are progressive at half fps, with each frame containing 2 fields stacked on top of each other.
+Instead they are progressive at half fps, with each frame containing 2 fields stacked on top of each other:
 
 <p align="center">
   <img width="640" height="360" src="https://github.com/Silentwarior112/PS2-PSS-Tools/blob/main/stack.JPG">
@@ -18,7 +18,7 @@ This becomes troublesome when trying to create a custom video for these intro ci
 there isn't a commonly available solution to render a video in this manner.
 
 The python script is a serviceable solution. It will take any interlaced video and re-encode it
-into a progressive video with the fields unwoven and stacked the same way original ones were.
+into a progressive video with the fields unwoven and stacked the same way original ones were:
 
 <p align="center">
   <img src="https://github.com/Silentwarior112/PS2-PSS-Tools/blob/main/convert.jpg">
