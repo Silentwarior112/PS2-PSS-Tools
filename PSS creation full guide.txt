@@ -1,0 +1,171 @@
+PS2STR Guide for Gran Turismo games by Silentwarior112
+Use this guide to create custom .PSS files.
+This can be used to make them for any PS2 game that uses them,
+but this specifically includes relevant information for Gran Turismo 3 through 4.
+
+Prerequisites:
+PS2STR Official PSS Stream Converter
+FFMpeg
+Video Unweaver python script
+MFAudio 1.1 (Maybe)
+
+*** Step 1: Create your MPEG-2 video ***
+	Export without audio, and save your video's audio track separately as any file that
+	your desired audio processing program (audacity for example) can use. Audio exporting shown below.
+	Use the settings below:
+
+	For the opening FMV: It is 50/59.94 fps. The video must have its fields un-interlaced and stacked. The PS2 will interlace it on its own.
+	For testing purposes, simply duplicate the video. Put one on top and one on the bottom, each squished to 640x224.
+	For proper quality, a method such as the one outlined below is required to generate an un-weaved field stack from an interlaced 50/60i video:
+
+	A warning: The overall pixelation and encoding quality look significantly worse than official stuff. PS2 Developers may have had access to some better encoders
+	than typical consumer offerings for MPEG-2.
+	No matter what I try I cannot increase the quality while maintaining 9Mbps bitrate.
+
+*** Step 1b: Create your high-quality 640x448 50/60 interlaced video ***
+	
+
+	Anyway, the 1st step in my method is to 1st render a perfect quality 50/59.940060 interlaced video at 640x448, with Bottom field first field order.
+	The script supports MP4 and AVI for the good formats.
+	
+	Then, use the field unweaver script to convert your high quality MP4/AVI into the field stacked MPEG-2, this is ready to be muxed into a PSS.
+
+If you want to inspect this before moving on, you can open it in VLC. Make sure to turn deinterlacing settings to Auto.
+Specifically, make sure the output_unwoven video isn't being viewed with deinterlacing on, since it's progressive.
+
+*** END Step 1b ***
+
+
+Audio-less FMVs from GT3's Arcade mode are strange, these should be 25/29.970030, however they were made at 25/30.0 for some reason.
+It is probably better to make new ones at 29.970030 if possible.
+They are standard interlaced video at 25/29.970030, no field stacking required.
+
+The ending movies are standard interlaced video at 25/29.970030, no field stacking required.
+
+Videos going into a PSS file must have these Specs:
+Format: mpeg2video (.m2v)
+Codec: mpeg2video
+Res: 640x448
+Aspect Ratio: 640x448
+Do NOT use 4:3. Always set the aspect ratio exactly the same as the resolution itself
+to ensure the entire screen is filled.
+
+Frame rate: 29.970030 for NTSC and 25.000000 for PAL (Must be exactly that)
+It would be best to record your video twice if you are targeting both NTSC and PAL versions of the game in question;
+Record one in NTSC frame rate, and re-record in PAL frame rate. That way, there is no frame rate mis-matches.
+You'll then need to export the NTSC and PAL recordings separately, at 29.970030 and 25.000000 respectively.
+
+Color Range: Broadcast limited (MPEG)
+Scan Mode: Progressive
+Deinterlacer: (Shoudn't matter)
+Interpolation: Small difference in image quality. Just use the best option your editor has.
+
+Rate Control: Constant Bitrate seems to work the best, but any will work.
+Bitrate: 9 Million bits per second
+The PS2 does not have a hard limit on the bitrate it can handle. Instead, it needs to be tuned to be as high as possible without causing
+any stutters. If the PS2 can play the whole video without encountering any frame drops, audio pops, or slowdown, the video is good.
+Testing DVD streaming speed is not really feasible. Instead, test on HDD loading with Mode 1 (Accurate Reads) enabled.
+Testing streaming speed over the PS2's Ethernet port is also a good idea.
+Buffer size: 1835.00 KiB If using constant bitrate, otherwise this isn't visible
+GOP: 12
+Fixed GOP: OFF
+B Frames: 2
+
+Audio Settings: Audio is separate anyway, so just make sure its disabled. You can leave it present in the timeline as long as its disabled.
+Channels: 2
+Sample Rate: 48000 (Actual audio sample rate will be 44100 for the PSS file. This shouldn't matter at all.)
+Codec: Doesn't matter
+Rate Control: Doesn't matter
+Bitrate: Doesn't matter
+Disable Audio: Enabled
+
+
+*** Step 2: Create your WAV audio ***
+You can approach this in many ways,
+my recommendation is to have your audio present in the timeline of your video editor,
+then export the video with video disabled and audio enabled.
+Export your audio as the following:
+.WAV (Microsoft)
+2 Channel (Stereo)
+Sample Rate: 44100hz
+Encoding: Signed 16-bit PCM
+
+*** Step 3: Convert your WAV file into a Compressed ADPCM .ads file ***
+PS2STR method:
+In PS2STR, go to the SPU Encode tab.
+Set the File Type to "2:Wave File"
+Loop (Gets cut off and only says Loo): Unchecked
+Interleave: 7:1024 (This equals 400 (hexadecimal) bytes in MFAudio)
+Click Add...
+Find your 44100hz, Signed 16-bit PCM, 2-channel stereo WAV file...
+Click Browse...
+Set your output directory folder
+You can set Overwrite to on or off. On is preferred
+Finally click Start. The generated .ads file will have the same name as your WAV file.
+PS2STR's generated .ads file may not work. If your video has no audio, try using MFAudio instead.
+I suspect PS2STR's SPU Encode doesn't work right for GT.
+
+MFAudio1.1 method:
+Open your 44100hz, Signed 16-bit PCM, 2-channel stereo WAV file...
+Set output format to: SS2 - Compressed ADPCM
+Frequency: 44100
+Samples: 16
+Channels: 2
+Interleave: 400 Bytes (MFAudio fails to mention that this is measured in hexadecimal, so 400 hex is 1024 decimal.)
+Last, rename the file extension of the output file from .ss2 to .ads
+
+*** Step 4: Use PS2STR to Mux the files together ***
+Go to the Mux tab and click Add new...
+Then at bottom left click Add...
+Set the stream. Pick "1: Video" and browse to your MPEG-2 video.
+Then add again, this time pick an audio stream. In the case of GT games, use "3: ADPCM".
+When browsing for the audio file you'll have to switch the file type to .ads
+
+Packet sizes and bit rate can be left at Auto.
+Once back at the Program Stream Setting window, click OK at the top right.
+This will prompt you to save a mux file. Save it.
+Back on the Mux tab, highlight the desired mux file and then click Start
+to generate a PSS file.
+
+*** Step 5: Pack into the ISO ***
+PSS files are part of the small group of file types that only stream from the iso.
+You will have to do a full re-pack of the game volume and iso to test the PSS file.
+
+*** Step 6: Testing ***
+Always test in the emulator first to make sure it at least plays.
+Turn off Progressive menus patch (GT4)
+The main thing to watch for is the interlace shake.
+Use Blend (Top Field First) to eliminate the shake.
+If it still shakes, there is something off about the video.
+Otherwise, set your audio settings to max buffer values. This avoids
+false-positives with audio popping.
+
+The best way to verify performance of the PSS files is on real hardware.
+Real hardware provides proper interlacing handling of the video
+and serves as the benchmark for the frame rate and audio performance.
+
+*** Other PS2STR features ***
+* Demux Tab *
+This will separate a PSS file into their component files.
+Set Stream to "1:All"
+Click Add...
+Find a PSS file...
+Click Browse...
+Set your output location
+Click Start to extract the PSS file.
+
+* Info Tab *
+This is essential to figuring out the specs of original
+PSS component files.
+Set File type as needed depending on what file you are inspecting
+Click Browse...
+Find your file...
+Click Show.
+A text window will pop up detailing the specs of the file.
+You can copy and paste this text into something else in needed.
+
+* IPU Convert Tab *
+For Gran Turismo PSS file purposes, this is not used.
+I believe this can convert MPEG-2 videos and PSS files
+into IPU files, which I guess is a different FMV format
+some games used.
