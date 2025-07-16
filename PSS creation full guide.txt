@@ -61,7 +61,9 @@ Deinterlacer: (Shoudn't matter)
 Interpolation: Small difference in image quality. Just use the best option your editor has.
 
 Rate Control: Constant Bitrate seems to work the best, but any will work.
-Bitrate: 9 Million bits per second
+Bitrate: 9 Million bits per second / 9000k bits per second.
+Make sure your video editor is actually rendering this bitrate. Some settings may confuse you into believing the editor
+is rendering at that bitrate, but is actually 10x your intention. Make sure to specify 9000kbps, using 9M may be interpreted as 10x that.
 The PS2 does not have a hard limit on the bitrate it can handle. Instead, it needs to be tuned to be as high as possible without causing
 any stutters. If the PS2 can play the whole video without encountering any frame drops, audio pops, or slowdown, the video is good.
 Testing DVD streaming speed is not really feasible. Instead, test on HDD loading with Mode 1 (Accurate Reads) enabled.
