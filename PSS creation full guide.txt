@@ -150,15 +150,18 @@ and instead will simply end it when the video stream runs to the end.
 
 If you encounter this problem, your video will need to be edited to ensure that the beginning of
 it does not contain any amount of duplicate frames. Various techniques could be employed,
-however unfortunately there doesn't seem to be any particular method to fix this reliably and
-gracefully; without introducing obvious 
+however unfortunately there doesn't seem to be any particular method to work around this reliably and
+gracefully; the best practice is to simply avoid using delayed fade-ins that sit on several
+identical frames before fading in.
 
 *** Step 6b: Testing ***
 Always test in the emulator first to make sure it at least plays.
-Turn off Progressive menus patch (GT4)
-The main thing to watch for is the interlace shake.
-Use Blend (Top Field First) to eliminate the shake.
-If it still shakes, there is something off about the video.
+
+For 50/60hz video, check the interlace shake:
+- Turn off Progressive menus patch if needed (GT4)
+- The main thing to watch for is the interlace shake.
+- Use Blend (Top Field First) to eliminate the shake.
+- If it still shakes, there is something off about the video.
 Otherwise, set your audio settings to max buffer values. This avoids
 false-positives with audio popping.
 
