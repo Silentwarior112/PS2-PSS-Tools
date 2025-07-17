@@ -133,7 +133,27 @@ to generate a PSS file.
 PSS files are part of the small group of file types that only stream from the iso.
 You will have to do a full re-pack of the game volume and iso to test the PSS file.
 
-*** Step 6: Testing ***
+*** Step 6a: Troubleshooting ***
+For gran turismo games specifically, there is a situation where your video
+will crash the game for no apparent reason. The settings and everything are
+perfect, but it just will not play. Why?
+
+If the video has audio attached in its PSS container,
+a frustrating quirk of the games' handling of video playback is exposed:
+The game can falsely think it has ended and try to terminate it, and, does it
+too early -- causing the game to freeze.
+It is difficult to determine exactly what it is detecting for this to happen,
+but somehow these games are programmed to detect the content of the video itself
+and decide if it has ended yet. This is strange because if the video does not contain
+an audio stream and/or is scripted to not play the audio, this problem suddenly vanishes 
+and instead will simply end it when the video stream runs to the end.
+
+If you encounter this problem, your video will need to be edited to ensure that the beginning of
+it does not contain any amount of duplicate frames. Various techniques could be employed,
+however unfortunately there doesn't seem to be any particular method to fix this reliably and
+gracefully; without introducing obvious 
+
+*** Step 6b: Testing ***
 Always test in the emulator first to make sure it at least plays.
 Turn off Progressive menus patch (GT4)
 The main thing to watch for is the interlace shake.
